@@ -8,6 +8,7 @@ import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
 import org.example.authservice.dto.response.UserResponse;
 import org.example.authservice.entity.User;
+import org.example.authservice.enumerate.Roles;
 import org.example.authservice.exception.ErrorCode;
 import org.example.authservice.exception.ServiceException;
 import org.example.authservice.mapper.UserMapper;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,14 +29,14 @@ public class UserService {
 
     private UserRepository userRepository;
     private UserMapper userMapper;
+    private PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(UserCreateRequest userCreateRequest) {
-        if (userRepository.existsByEmail(userCreateRequest.getEmail())) {
+        if (userRepository.existsByEmail(userCreateRequest.getEmail())||userRepository.existsByUsername(userCreateRequest.getUsername())) {
             throw new ServiceException(ErrorCode.USER_EXISTED);
         }
         User user = userMapper.toUser(userCreateRequest);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(5);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(userCreateRequest.getPassword()));
 
         return userMapper.toUserResponse(userRepository.save(user));
     }

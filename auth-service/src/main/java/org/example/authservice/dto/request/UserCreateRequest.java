@@ -7,12 +7,10 @@ import lombok.experimental.FieldDefaults;
 import java.time.LocalDate;
 
 @Data
-@Getter
-@Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
-@NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreateRequest {
 
     @Size(min = 5, message = "USERNAME_INVALID")

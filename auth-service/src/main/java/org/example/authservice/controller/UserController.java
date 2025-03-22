@@ -1,6 +1,9 @@
 package org.example.authservice.controller;
 
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.example.authservice.dto.request.UserCreateRequest;
 import org.example.authservice.dto.request.UserUpdateRequest;
 import org.example.authservice.dto.response.UserResponse;
@@ -12,8 +15,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
     private UserService userService;
 
     @PostMapping
